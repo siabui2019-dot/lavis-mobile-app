@@ -11,6 +11,7 @@ import { homedir } from "node:os";
 
 const STATE_PATH = resolve(".cursor/hooks/state/ai-memory.json");
 const INDEX_PATH = resolve(".cursor/hooks/state/continual-learning-index.json");
+const SELF_IMPROVEMENT_INDEX_PATH = resolve(".cursor/hooks/state/self-improvement-index.json");
 const DEFAULT_CURSOR_PROJECT_ROOTS = [
   join(homedir(), ".cursor", "projects"),
   join(homedir(), ".cursor", "workspace"),
@@ -324,7 +325,10 @@ function buildFollowupMessage(matchingTranscriptRoots, repoIdentifiers) {
     `Repo/workspace identifiers used for matching: ${identifiers || "`workspace`"}. ` +
     `Use incremental transcript processing with index file \`${INDEX_PATH}\`: only consider transcripts not in the index or transcripts whose mtime is newer than indexed mtime. ` +
     "Have the subagent refresh index mtimes, remove entries for deleted transcripts, and update `AGENTS.md` only for high-signal recurring user corrections and durable workspace facts. " +
-    "Exclude one-off/transient details and secrets. If no meaningful updates exist, respond exactly: No high-signal memory updates."
+    "Exclude one-off/transient details and secrets. If no meaningful updates exist, respond exactly: No high-signal memory updates. " +
+    "Then run the `self-improvement` skill. Use the `self-improvement-updater` subagent to inspect the same matching transcript roots for recurring workflow failures, validation gaps, and repo automation opportunities. " +
+    `Use separate incremental transcript processing with index file \`${SELF_IMPROVEMENT_INDEX_PATH}\`. ` +
+    "Update `SELF_IMPROVEMENT.md` only with durable, actionable improvement candidates or applied improvements. If no meaningful updates exist, respond exactly: No self-improvement updates."
   );
 }
 

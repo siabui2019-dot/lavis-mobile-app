@@ -5,13 +5,17 @@
 This repository includes repo-wide Cursor AI memory support at the workspace root:
 
 - `AGENTS.md` stores durable user preferences and stable workspace facts.
+- `SELF_IMPROVEMENT.md` stores recurring agent workflow improvements and applied automation lessons.
 - `.cursor/agents/memory-creator.md` initializes or seeds memory on demand.
 - `.cursor/agents/agents-memory-updater.md` mines high-signal transcript deltas and keeps `AGENTS.md` current.
+- `.cursor/agents/self-improvement-updater.md` mines recurring workflow failures, validation gaps, and automation opportunities.
 - `.cursor/skills/memory-create/SKILL.md` routes explicit memory creation requests to the memory creator subagent.
 - `.cursor/skills/continual-learning/SKILL.md` routes recurring memory maintenance to the memory updater subagent.
+- `.cursor/skills/self-improvement/SKILL.md` routes self-improvement maintenance to the self-improvement updater subagent.
 - `.cursor/hooks/hooks.json` registers a stop hook that can trigger continual learning automatically.
 
 The hook uses `.cursor/hooks/ai-memory-stop.mjs` and writes runtime state under `.cursor/hooks/state/`, which is ignored by Git.
+When the hook triggers, it asks Cursor to run continual learning first and then continue into self-improvement using separate incremental indexes.
 
 The hook analyzes every matching Cursor transcript root it can discover for this repository. It matches roots from:
 
