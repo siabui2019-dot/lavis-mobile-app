@@ -18,7 +18,10 @@ Use from `continual-learning` when transcript deltas may produce durable memory 
    - `## Learned User Preferences`
    - `## Learned Workspace Facts`
 2. Load the incremental index from `.cursor/hooks/state/continual-learning-index.json` if present.
-3. Inspect only transcript files under the current workspace's Cursor transcript directory that are new or have newer mtimes than the index.
+3. Inspect transcript files under every matching Cursor transcript root supplied by the hook follow-up message.
+   - Matching roots are discovered from the active transcript path, the repository remote slug, the current workspace directory name, and any `AI_MEMORY_WORKSPACE_MATCHES` aliases.
+   - If no roots are supplied, derive the active root from the current transcript path when available.
+   - Do not inspect unrelated Cursor projects unless the hook explicitly says all Cursor projects were included.
 4. Pull out only durable, reusable items:
    - recurring user preferences or corrections
    - stable workspace facts
